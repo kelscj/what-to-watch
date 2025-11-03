@@ -1,0 +1,9 @@
+# Ignore big or unnecessary files
+*.db
+*.csv
+*.json
+*.zip
+__pycache__/
+instance/
+.env
+*.log
