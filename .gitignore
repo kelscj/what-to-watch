@@ -4,6 +4,7 @@
 *.json
 *.zip
 __pycache__/
-instance/
+instance/database.db
+movie_data.csv
 .env
 *.log
