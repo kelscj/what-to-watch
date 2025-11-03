@@ -1,0 +1,71 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: black;
+  background-size: cover;
+  background-position: center; 
+  margin: 0;
+  padding: 0;
+  background-image: url('/static/top-view-popcorn-frame-with-copy-space.jpg'); 
+  background-repeat: no-repeat; 
+  background-attachment: fixed; 
+}
+
+.content {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: black;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  background-image: url('/static/v602-nunoon-32-rippednotes.jpg'); 
+  opacity: 0.8;
+  background-position: center; 
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-attachment: fixed; 
+}
+.content h1 {
+  color: black;
+  margin-bottom: 20px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.content h2 {
+        text-align: left;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        color: black;
+        text-decoration: underline;
+}
+
+.content input[type="text"] {
+  width: 60%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.content button {
+  padding: 10px 10px;
+  background-color: gold;
+  color: black;
+  border: black;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+.content button:hover {
+  background-color: goldenrod;
+}
+
+.content ul {
+  list-style-type: none;
+  padding: 0;
+}
+.content li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+  
+}
