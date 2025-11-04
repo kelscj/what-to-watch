@@ -48,8 +48,8 @@ def index():
         # Split on commas or whitespace, remove empty terms
         terms = [term.strip().lower() for term in search_query.replace(",", " ").split() if term.strip()]
 
-        # Start with all movies
-        query = MyTask.query
+        # Start with all non-adult movies
+        query = MyTask.query.filter(MyTask.adult.is_(False))
 
         # Filter so each term must appear in either genres or keywords (AND logic)
         for term in terms:
@@ -63,26 +63,22 @@ def index():
 
         # Apply additional filters from form inputs
         genre_filter = request.args.get("genre", "").strip()
-        adult_filter = request.args.get("adult", "").strip()
         runtime_filter = request.args.get("runtime", type=int)
 
         # Apply filters if selected
         if genre_filter:
             query = query.filter(MyTask.genres.ilike(f"%{genre_filter}%"))
 
-        if adult_filter:
-            if adult_filter.lower() == "true":
-                query = query.filter(MyTask.adult.is_(True))
-            elif adult_filter.lower() == "false":
-                query = query.filter(MyTask.adult.is_(False))
-
         if runtime_filter:
             query = query.filter(MyTask.runtime <= runtime_filter)
 
+        # Always exclude adult content
+        query = query.filter(MyTask.adult.is_(False))
+
         tasks = query.order_by(MyTask.vote_average.desc()).all()
 
-
     return render_template("index.html", tasks=tasks, query=search_query)
+
 
 # Delete route (optional, only if needed)
 @app.route("/delete/<int:id>")
