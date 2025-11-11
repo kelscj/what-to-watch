@@ -35,50 +35,58 @@ class MyTask(db.Model):
     def __repr__(self):
         return f"<Movie {self.title}>"
 
-# Home page – display all entries
 @app.route("/", methods=["GET"])
 def index():
     search_query = request.args.get("query", "").strip()
-    tasks = []
     query = MyTask.query
 
-    if search_query:
-        # Split on commas or whitespace, remove empty terms
-        terms = [term.strip().lower() for term in search_query.replace(",", " ").split() if term.strip()]
-        
-        # Filter so each term must appear in either genres, keywords, cast, or title
-        for term in terms:
-            like_term = f"%{term}%"
-            query = query.filter(
-                or_(
-                    MyTask.listed_in.ilike(like_term),
-                    MyTask.description.ilike(like_term),
-                    MyTask.title.ilike(like_term),
-                    MyTask.cast.ilike(like_term),
-                    MyTask.director.ilike(like_term)
+    # Grab filters 
+    rating_filter = [r for r in request.args.getlist("rating") if r.strip()]
+    type_filter = request.args.get("type")
+    service_filter = [s for s in request.args.getlist("service") if s.strip()]
+    genre_filter = [g for g in request.args.getlist("genre") if g.strip()]
+
+    has_filters = bool(rating_filter or type_filter or service_filter or genre_filter)
+    tasks = []
+
+    if search_query or has_filters:
+        # Search term logic
+        if search_query:
+            terms = [term.strip().lower() for term in search_query.replace(",", " ").split() if term.strip()]
+            for term in terms:
+                like_term = f"%{term}%"
+                query = query.filter(
+                    or_(
+                        MyTask.listed_in.ilike(like_term),
+                        MyTask.description.ilike(like_term),
+                        MyTask.title.ilike(like_term),
+                        MyTask.cast.ilike(like_term),
+                        MyTask.director.ilike(like_term)
+                    )
                 )
-            )
 
-        # Apply additional filters from form inputs
-        rating_filter = request.args.getlist("rating")
-        type_filter = request.args.get("type")
-        service_filter = request.args.getlist("service")
-        genre_filter = request.args.getlist("genre")
-
-
-        # Apply filters if selected
+        # Filter logic
         if genre_filter:
-            query = query.filter(or_(*[MyTask.service.ilike(f"%{genre}%") for genre in genre_filter ]))
+            query = query.filter(or_(*[MyTask.listed_in.ilike(f"%{genre}%") for genre in genre_filter]))
         if rating_filter:
-            query = query.filter(or_(*[MyTask.service.ilike(f"%{rating}%") for rating in rating_filter ]))
-        if type_filter:
+            query = query.filter(or_(*[MyTask.rating.ilike(f"%{rating}%") for rating in rating_filter]))
+        if type_filter and type_filter.strip():
             query = query.filter(MyTask.type.ilike(f"%{type_filter}%"))
         if service_filter:
-            query = query.filter(or_(*[MyTask.service.ilike(f"%{service}%") for service in service_filter ]))
+            query = query.filter(or_(*[MyTask.service.ilike(f"%{service}%") for service in service_filter]))
 
         tasks = query.all()
 
-    return render_template("index.html", tasks=tasks, query=search_query)
+    return render_template(
+        "index.html",
+        tasks=tasks,
+        query=search_query,
+        selected_genres=genre_filter,
+        selected_ratings=rating_filter,
+        selected_type=type_filter,
+        selected_services=service_filter
+    )
+
 
 
 # Delete route (optional, only if needed)

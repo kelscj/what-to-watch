@@ -27,39 +27,31 @@
             </div>
             <div>
                 <label for="service">Streaming Service:</label>
-                <select name="service" id="service" multiple>
-                    <option value="">Any</option>
-                    <option value="Netflix">Netflix</option>
-                    <option value="Hulu">Hulu</option>
-                    <option value="Disney Plus">Disney Plus</option>
-                    <option value="Prime Video">Prime Video</option>
+                <select id="service" name="service" multiple>
+                {% for s in ['Netflix', 'Hulu', 'Disney Plus', 'Amazon Prime'] %}
+                    <option value="{{ s }}" {% if s in selected_services %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
                 </select>
+
             </div>
             <div>
                 <label for="type">TV Show vs Movie:</label>
-                <select name="type" id="type">
-                    <option value="">Any</option>
-                    <option value="Movie">Movie</option>
-                    <option value="TV Show">TV Show</option>
+                <select id="type" name="type">
+                <option value="">-- Select filter option --</option>
+                {% for t in ['Movie', 'TV Show'] %}
+                    <option value="{{ t }}" {% if t == selected_type %}selected{% endif %}>{{ t }}</option>
+                {% endfor %}
                 </select>
+
             </div>
             <div>
                 <label for="rating">Rating:</label>
-                <select name="rating" id="rating" multiple>
-                    <option value="">Any</option>
-                    <option value="TV-G">TV-G</option>
-                    <option value="TV-PG">TV-PG</option>
-                    <option value="PG-13">PG-13</option>
-                    <option value="R">R</option>
-                    <option value="TV-MA">TV-MA</option>
-                    <option value="TV-Y">TV-Y</option>
-                    <option value="TV-Y7">TV-Y7</option>
-                    <option value="TV-14">TV-14</option>
-                    <option value="Ages 13+">Ages 13+</option>
-                    <option value="Ages 16+">Ages 16+</option>
-                    <option value="Ages 18+">Ages 18+</option>
-                    <option value="Not Rated">Not Rated</option>
+                <select id="rating" name="rating" multiple>
+                {% for r in ['TV-G', 'TV-PG', 'Not Rated', 'PG-13', 'TV-14', 'TV-Y7', 'TV-Y', 'TV-MA', 'R', 'Ages 13+', 'Ages 18+', 'Ages 16+'] %}
+                    <option value="{{ r }}" {% if r in selected_ratings %}selected{% endif %}>{{ r }}</option>
+                {% endfor %}
                 </select>
+
             </div>
         </div>
     </form>
@@ -70,14 +62,14 @@
         <ul>
         {% for task in tasks %}
             <li>
-                <strong>{{ task.title }}</strong> - {{ task.listed_in }} - {{task.duration}} mins - {{task.release_year}} - {{task.rating}}<br>
+                <strong>{{ task.title }}</strong> - {{ task.listed_in }} - {{task.duration}} - {{task.release_year}} - {{task.rating}}<br>
                 Stream on: <strong>{{ task.service }}</strong> - Directed by: {{ task.director }} <br>
                 <em>{{ task.description }}</em>
             </li>
         {% endfor %}
         </ul>
-    {% elif query %}
-        <p>No results found for "{{ query }}".</p>
+    {% elif query or selected_genres or selected_ratings or selected_type or selected_services %}
+        <p>No results found.</p>
     {% endif %}
 </div>
 {% endblock %}

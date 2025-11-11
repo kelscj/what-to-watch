@@ -54,7 +54,7 @@ body {
   border: black;
   border-radius: 5px;
   cursor: pointer;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+  font-family: Arial, sans-serif;
 }
 .content button:hover {
   background-color: rgb(146, 182, 245);
