@@ -2,61 +2,66 @@
 
 {% block content %}
 <div class ="content">
-    <h1>What Should We Watch?</h1>
-    <form method="GET" action="/">
-        <input type="text" name="query" placeholder="Search keywords for your movie recommendations (ex: Action, Cats)" value="{{ query }}" size="80">
-        <button type="submit">Search Movies</button>
-        <br><br>
-        <label for="genre">Genre:</label>
-        <select name="genre" id="genre">
-            <option value="">Any</option>
-            <option value="Action" {% if request.args.get('genre') == 'Action' %}selected{% endif %}>Action</option>
-            <option value="Adult" {% if request.args.get('genre') == 'Adult' %}selected{% endif %}>Adult</option>
-            <option value="Adventure" {% if request.args.get('genre') == 'Adventure' %}selected{% endif %}>Adventure</option>
-            <option value="Animation" {% if request.args.get('genre') == 'Animation' %}selected{% endif %}>Animation</option>
-            <option value="Biography" {% if request.args.get('genre') == 'Biography' %}selected{% endif %}>Biography</option>
-            <option value="Comedy" {% if request.args.get('genre') == 'Comedy' %}selected{% endif %}>Comedy</option>
-            <option value="Crime" {% if request.args.get('genre') == 'Crime' %}selected{% endif %}>Crime</option>
-            <option value="Documentary" {% if request.args.get('genre') == 'Documentary' %}selected{% endif %}>Documentary</option>
-            <option value="Drama" {% if request.args.get('genre') == 'Drama' %}selected{% endif %}>Drama</option>
-            <option value="Family" {% if request.args.get('genre') == 'Family' %}selected{% endif %}>Family</option>
-            <option value="Fantasy" {% if request.args.get('genre') == 'Fantasy' %}selected{% endif %}>Fantasy</option>
-            <option value="Film Noir" {% if request.args.get('genre') == 'Film Noir' %}selected{% endif %}>Film Noir</option>
-            <option value="Game Show" {% if request.args.get('genre') == 'Game Show' %}selected{% endif %}>Game Show</option>
-            <option value="History" {% if request.args.get('genre') == 'History' %}selected{% endif %}>History</option>
-            <option value="Horror" {% if request.args.get('genre') == 'Horror' %}selected{% endif %}>Horror</option>
-            <option value="Musical" {% if request.args.get('genre') == 'Musical' %}selected{% endif %}>Musical</option>
-            <option value="Music" {% if request.args.get('genre') == 'Music' %}selected{% endif %}>Music</option>
-            <option value="Mystery" {% if request.args.get('genre') == 'Mystery' %}selected{% endif %}>Mystery</option>
-            <option value="News" {% if request.args.get('genre') == 'News' %}selected{% endif %}>News</option>
-            <option value="Reality-TV" {% if request.args.get('genre') == 'Reality-TV' %}selected{% endif %}>Reality-TV</option>
-            <option value="Romance" {% if request.args.get('genre') == 'Romance' %}selected{% endif %}>Romance</option>
-            <option value="Sci-Fi" {% if request.args.get('genre') == 'Sci-Fi' %}selected{% endif %}>Sci-Fi</option>
-            <option value="Short" {% if request.args.get('genre') == 'Short' %}selected{% endif %}>Short</option>
-            <option value="Sport" {% if request.args.get('genre') == 'Sport' %}selected{% endif %}>Sport</option>
-            <option value="Talk-Show" {% if request.args.get('genre') == 'Talk-Show' %}selected{% endif %}>Talk-Show</option>
-            <option value="Thriller" {% if request.args.get('genre') == 'Thriller' %}selected{% endif %}>Thriller</option>
-            <option value="War" {% if request.args.get('genre') == 'War' %}selected{% endif %}>War</option>
-            <option value="Western" {% if request.args.get('genre') == 'Western' %}selected{% endif %}>Western</option>
-        </select>
+    <h1>What Should We Watch? 🎬</h1>
+    <form method="GET" action="/" class="filter-form">
+        <div class="search-bar">
+            <input type="text" name="query" placeholder="Search keywords for your movie recommendations (ex: Action, Cats)" value="{{ query }}" size="80">
+            <button type="submit">Search Movies</button>
+        </div>
+        <br>
+        <div class="filters">
+            <div>
+                <label for="genre">Genre:</label>
+                <select name="genre" id="genre" multiple>
+                    <option value="">Any</option>
+                    {% for g in [
+                        'Action & Adventure', 'Animation', 'Arts & Culture', 'Black Stories', 'Classics', 'Comedy', 'Crime', 
+                        'Documentary', 'Faith & Spirituality', 'History', 'Horror', 'International', 'Kids & Family', 'Latino', 
+                        'Lifestyle', 'LGBTQ+', 'Movies', 'Music', 'Mystery', 'Reality', 'Romance', 'Romance Comedy', 'Sci-Fi & Fantasy', 
+                        'Science & Tech', 'Series', 'Special Interest', 'Sports', 'Talk Show', 'Teen', 'Thriller', 'TV Series'
 
-
-        <label for="adult">Adult:</label>
-        <select name="adult" id="adult">
-            <option value="">Any</option>
-            <option value="true" {% if request.args.get('adult') == 'true' %}selected{% endif %}>Explicit</option>
-            <option value="false" {% if request.args.get('adult') == 'false' %}selected{% endif %}>Not Explicit</option>
-        </select>
-
-
-        <label for="runtime">Max Runtime (minutes):</label>
-        <input
-            type="number"
-            name="runtime"
-            id="runtime"
-            min="0"
-            placeholder="e.g. 120"
-            value="{{ request.args.get('runtime', '') }}">
+                    ] %}
+                        <option value="{{ g }}" {% if request.args.get('genre') == g %}selected{% endif %}>{{ g }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="service">Streaming Service:</label>
+                <select name="service" id="service" multiple>
+                    <option value="">Any</option>
+                    <option value="Netflix">Netflix</option>
+                    <option value="Hulu">Hulu</option>
+                    <option value="Disney Plus">Disney Plus</option>
+                    <option value="Prime Video">Prime Video</option>
+                </select>
+            </div>
+            <div>
+                <label for="type">TV Show vs Movie:</label>
+                <select name="type" id="type">
+                    <option value="">Any</option>
+                    <option value="Movie">Movie</option>
+                    <option value="TV Show">TV Show</option>
+                </select>
+            </div>
+            <div>
+                <label for="rating">Rating:</label>
+                <select name="rating" id="rating" multiple>
+                    <option value="">Any</option>
+                    <option value="TV-G">TV-G</option>
+                    <option value="TV-PG">TV-PG</option>
+                    <option value="PG-13">PG-13</option>
+                    <option value="R">R</option>
+                    <option value="TV-MA">TV-MA</option>
+                    <option value="TV-Y">TV-Y</option>
+                    <option value="TV-Y7">TV-Y7</option>
+                    <option value="TV-14">TV-14</option>
+                    <option value="Ages 13+">Ages 13+</option>
+                    <option value="Ages 16+">Ages 16+</option>
+                    <option value="Ages 18+">Ages 18+</option>
+                    <option value="Not Rated">Not Rated</option>
+                </select>
+            </div>
+        </div>
     </form>
 
 
@@ -65,8 +70,9 @@
         <ul>
         {% for task in tasks %}
             <li>
-                <strong>{{ task.title }}</strong> - {{ task.genres }} - {{task.runtime}} mins - {{task.release_date}}<br>
-                <em>{{ task.overview }}</em>
+                <strong>{{ task.title }}</strong> - {{ task.listed_in }} - {{task.duration}} mins - {{task.release_year}} - {{task.rating}}<br>
+                Stream on: <strong>{{ task.service }}</strong> - Directed by: {{ task.director }} <br>
+                <em>{{ task.description }}</em>
             </li>
         {% endfor %}
         </ul>
@@ -75,3 +81,4 @@
     {% endif %}
 </div>
 {% endblock %}
+

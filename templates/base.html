@@ -2,11 +2,44 @@
     
 <head>
     <meta charset="UTF-8">
-    <title>Movie Search</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+
 </head>
 <body>
     {% block content %}
     {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/virtual-select-plugin/dist/virtual-select.min.js"></script>
+    {% block scripts %}
+    <script>
+    window.addEventListener('load', function () {
+    VirtualSelect.init({
+        ele: '#genre,#rating,#service',
+        multiple: true,
+        search: false,
+        placeholder: 'Select filter option(s)',
+        disableSelectAll: false,
+        showSelectedOptionsFirst: true,
+        closeOnSelect: false,
+
+        // ✅ Layout and style improvements
+        maxWidth: '240px',
+        dropboxWrapper: 'body',
+        zIndex: 9999,
+        markSearchResults: false,  // disables highlighting
+    });
+
+    // Apply consistent width per filter box
+    document.querySelectorAll('.vscomp-wrapper').forEach(el => {
+        el.style.minWidth = '180px';
+        el.style.maxWidth = '220px';
+    });
+    });
+    </script>
+    {% endblock %}
+
+
 </body>
 </html>

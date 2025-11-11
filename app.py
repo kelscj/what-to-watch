@@ -18,22 +18,19 @@ db = SQLAlchemy(app)
 
 # Model
 class MyTask(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    show_id = db.Column(db.String(500), primary_key=True)
+    type = db.Column(db.String(500), nullable=True)
     title = db.Column(db.String(500), nullable=False)
-    vote_average = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(500), nullable=False)
-    release_date = db.Column(db.String(500), nullable=False)
-    revenue = db.Column(db.Float, nullable=False)
-    runtime = db.Column(db.Integer, nullable=False)
-    adult = db.Column(db.Boolean, nullable=False)
-    budget = db.Column(db.Float, nullable=False)
-    original_language = db.Column(db.String(500), nullable=False)
-    overview = db.Column(db.Text, nullable=False)
-    popularity = db.Column(db.Float, nullable=False)
-    tagline = db.Column(db.String(500), nullable=True)
-    genres = db.Column(db.String(500), nullable=True)
-    production_companies = db.Column(db.String(500), nullable=True)
-    keywords = db.Column(db.String(500), nullable=True)
+    director = db.Column(db.String(500), nullable=True)
+    cast = db.Column(db.String(1000), nullable=True)
+    country = db.Column(db.String(500), nullable=True)
+    date_added = db.Column(db.String(100), nullable=True)
+    release_year = db.Column(db.Integer, nullable=True)
+    rating = db.Column(db.String(100), nullable=True)
+    duration = db.Column(db.String(100), nullable=True)
+    listed_in = db.Column(db.String(500), nullable=True)
+    description = db.Column(db.Text, nullable=True)
+    service = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
         return f"<Movie {self.title}>"
@@ -43,39 +40,43 @@ class MyTask(db.Model):
 def index():
     search_query = request.args.get("query", "").strip()
     tasks = []
+    query = MyTask.query
 
     if search_query:
         # Split on commas or whitespace, remove empty terms
         terms = [term.strip().lower() for term in search_query.replace(",", " ").split() if term.strip()]
-
-        # Start with all non-adult movies
-        query = MyTask.query.filter(MyTask.adult.is_(False))
-
-        # Filter so each term must appear in either genres or keywords (AND logic)
+        
+        # Filter so each term must appear in either genres, keywords, cast, or title
         for term in terms:
             like_term = f"%{term}%"
             query = query.filter(
                 or_(
-                    MyTask.genres.ilike(like_term),
-                    MyTask.keywords.ilike(like_term)
+                    MyTask.listed_in.ilike(like_term),
+                    MyTask.description.ilike(like_term),
+                    MyTask.title.ilike(like_term),
+                    MyTask.cast.ilike(like_term),
+                    MyTask.director.ilike(like_term)
                 )
             )
 
         # Apply additional filters from form inputs
-        genre_filter = request.args.get("genre", "").strip()
-        runtime_filter = request.args.get("runtime", type=int)
+        rating_filter = request.args.getlist("rating")
+        type_filter = request.args.get("type")
+        service_filter = request.args.getlist("service")
+        genre_filter = request.args.getlist("genre")
+
 
         # Apply filters if selected
         if genre_filter:
-            query = query.filter(MyTask.genres.ilike(f"%{genre_filter}%"))
+            query = query.filter(or_(*[MyTask.service.ilike(f"%{genre}%") for genre in genre_filter ]))
+        if rating_filter:
+            query = query.filter(or_(*[MyTask.service.ilike(f"%{rating}%") for rating in rating_filter ]))
+        if type_filter:
+            query = query.filter(MyTask.type.ilike(f"%{type_filter}%"))
+        if service_filter:
+            query = query.filter(or_(*[MyTask.service.ilike(f"%{service}%") for service in service_filter ]))
 
-        if runtime_filter:
-            query = query.filter(MyTask.runtime <= runtime_filter)
-
-        # Always exclude adult content
-        query = query.filter(MyTask.adult.is_(False))
-
-        tasks = query.order_by(MyTask.vote_average.desc()).all()
+        tasks = query.all()
 
     return render_template("index.html", tasks=tasks, query=search_query)
 

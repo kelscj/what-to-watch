@@ -1,12 +1,8 @@
 import pandas as pd
 from app import db, MyTask, app
 
-df = pd.read_csv("movie_data.csv")
+df = pd.read_csv("streaming_dataset.csv")
 df.fillna('', inplace=True)
-
-def to_bool(value):
-    # Convert CSV adult field to true boolean
-    return str(value).strip().lower() in ("true", "1", "yes")
 
 with app.app_context():
     db.create_all()  # Ensure DB exists before import
@@ -17,21 +13,19 @@ with app.app_context():
     for idx, row in df.iterrows():
         try:
             task = MyTask(
+                show_id =int(row['show_id']),
+                type=row['type'],
                 title=row['title'],
-                vote_average=float(row['vote_average']),
-                status=row['status'],
-                release_date=row['release_date'],
-                revenue=float(row['revenue']),
-                runtime=int(row['runtime']),
-                adult=to_bool(row['adult']),
-                budget=float(row['budget']),
-                original_language=row['original_language'],
-                overview=row['overview'],
-                popularity=float(row['popularity']),
-                tagline=row['tagline'],
-                genres=row['genres'],
-                production_companies=row['production_companies'],
-                keywords=row['keywords']
+                director=row['director'],
+                cast=row['cast'],
+                country=row['country'],
+                date_added=row['date_added'],
+                release_year=int(row['release_year']),
+                rating=row['rating'],
+                duration=row['duration'],
+                listed_in=row['listed_in'],
+                description=row['description'],
+                service=row['service']
             )
             
             db.session.add(task)

@@ -19,7 +19,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   background-image: url('/static/v602-nunoon-32-rippednotes.jpg'); 
-  opacity: 0.8;
+  opacity: 0.9;
   background-position: center; 
   background-size: cover; 
   background-repeat: no-repeat; 
@@ -28,12 +28,13 @@ body {
 .content h1 {
   color: black;
   margin-bottom: 20px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 70px;
+  font-family: Arial, sans-serif;
 }
 
 .content h2 {
         text-align: left;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-family: Arial, sans-serif;
         color: black;
         text-decoration: underline;
 }
@@ -48,7 +49,7 @@ body {
 
 .content button {
   padding: 10px 10px;
-  background-color: gold;
+  background-color: rgb(101, 154, 244);
   color: black;
   border: black;
   border-radius: 5px;
@@ -56,7 +57,7 @@ body {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
 .content button:hover {
-  background-color: goldenrod;
+  background-color: rgb(146, 182, 245);
 }
 
 .content ul {
@@ -65,7 +66,175 @@ body {
 }
 .content li {
   padding: 10px;
-  border-bottom: 1px solid #ccc;
   text-align: left;
-  
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+.search-bar input[type="text"] {
+    flex: 1;                 
+    min-width: 400px;        
+    padding: 10px;           
+    font-size: 14px;         
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+
+/* --- Compact, Clean Multi-Select Dropdown Styling --- */
+
+/* Closed dropdown: match native select look */
+.vscomp-toggle-button {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  color: black;
+  font-size: 14px;
+  font-family: inherit;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 22px 0 8px; /* space on right for arrow */
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  width: 200px;
+  position: relative;
+}
+
+/* Add a ▼ arrow just like the single select */
+.vscomp-toggle-button::after {
+  content: "⌄";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-70%);
+  font-size: 14px;
+  color: #191919;
+  pointer-events: none;
+}
+
+/* Dropdown menu: compact white box, no extra padding */
+.vscomp-options-container {
+  border: 1px solid #ccc !important;
+  border-radius: 2px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  width: 150px;
+  overflow-y: scroll;
+  font-size: 13px;
+  color: #000;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each option: 20px height, no whitespace */
+.vscomp-option {
+  position: relative;
+  padding: 0 0px 0 22px !important; /* space for checkmark */
+  background: rgb(233, 232, 231);
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* Hover: subtle blue highlight */
+.vscomp-option:hover {
+  background-color: rgb(101, 154, 244) !important;
+  color: white !important;
+  border-radius: 2px;
+}
+
+/* Left-side checkmark for selected options */
+.vscomp-option.selected::before {
+  content: "✓";
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  background-color: rgb(101, 154, 244) !important;
+  color: white;
+}
+
+.vscomp-option.selected {
+  font-size: 13px;
+  background-color: rgb(101, 154, 244) !important;
+  color: white;
+  border-radius: 2px;
+}
+
+
+/* White checkmark when hovered */
+.vscomp-option.selected:hover::before {
+  color: white;
+}
+
+/* Tighten dropdown bottom area — remove blank space */
+.vscomp-options {
+  margin: 0;
+  padding: 0;
+}
+
+/* Hide 'No options found' / 'No results found' messages */
+.vscomp-no-options,
+.vscomp-no-search-results {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Remove extra padding under the options list */
+.vscomp-options-container::after {
+  content: none;
+}
+
+/* Remove internal search bar */
+.vscomp-search-container {
+  display: none !important;
+}
+
+/* Wrapper alignment */
+.vscomp-wrapper {
+  display: inline-block;
+  width: 200px;
+  vertical-align: top;
+}
+
+/* Filters layout */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.filters label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+  color: black;
+  font-size: 14px;
+}
+
+/* Keep native single-select consistent */
+.filters select:not([multiple]) {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  color: black;
+  font-size: 14px;
+  height: 20px;
+  padding: 0 4px;
+  width: 200px;
+  font-family: inherit;
+  box-sizing: border-box;
 }
